@@ -2,8 +2,9 @@ import React, {useState, useEffect, useCallback, useMemo} from "react";
 import {StyleSheet, View, Text, TouchableOpacity} from "react-native";
 import MapView, {Marker} from 'react-native-maps';
 import {mapConfigs} from "../constants/config";
+import Place from "../models/place";
 
-const MapWindow = ({userLocation}) => {
+const MapWindow = ({userLocation, places}) => {
     const [maxSearchDistance, setMaxSearchDistance] = useState(1);
     const [region, setRegion] = useState({
         latitude: userLocation.latitude,
@@ -40,6 +41,11 @@ const MapWindow = ({userLocation}) => {
                     coordinate={userLocation}
                     title={"Eu"}
                 />}
+                {places.map(p => <Marker
+                    key={p.id}
+                    coordinate={p.location}
+                    title={p.name}
+                />)}
             </MapView>
             <MapGUI distance={maxSearchDistance} backToUserLocation={backToUserLocation}/>
         </View>

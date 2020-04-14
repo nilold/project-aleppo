@@ -1,12 +1,22 @@
 import React, {useState, useEffect, useLayoutEffect} from "react";
 import {View, StyleSheet} from "react-native";
+import {useDispatch, useSelector} from "react-redux";
 import * as Location from 'expo-location';
 import {askForLocationPermissions} from "../permissions/permissions"
 import HeaderButton from "../components/HeaderButton";
 import MapWindow from "../components/MapWindow";
 
+import {fetchPlaces} from "../store/placesActions";
+
 const MapScreen = ({navigation}) => {
     const [userLocation, setUserLocation] = useState(null);
+    const places = useSelector(state => state.places.allPlaces)
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(fetchPlaces())
+    }, []);
+
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -34,7 +44,7 @@ const MapScreen = ({navigation}) => {
 
     return (
         <View style={styles.container}>
-            {userLocation && <MapWindow userLocation={userLocation}/>}
+            {userLocation && <MapWindow userLocation={userLocation} places={places}/>}
         </View>
     );
 };

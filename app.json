@@ -1,11 +1,10 @@
 {
   "expo": {
-    "name": "aleppo",
+    "name": "Aleppo",
     "slug": "aleppo",
     "platforms": [
       "ios",
-      "android",
-      "web"
+      "android"
     ],
     "version": "1.0.0",
     "orientation": "portrait",
@@ -22,7 +21,14 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.aleppo.aleppo",
+      "buildNumber": "1.0.0",
+      "googleServicesFile": "./GoogleService-Info.plist"
+    },
+    "android": {
+      "package": "com.aleppo.aleppo",
+      "versionCode": 1,
+      "googleServicesFile": "./google-services.json"
     }
   }
 }
