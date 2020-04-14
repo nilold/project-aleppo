@@ -41,7 +41,8 @@ const MapWindow = ({userLocation, places}) => {
                     coordinate={userLocation}
                     title={"Eu"}
                 />}
-                {places.map(p => <Marker
+                {places &&
+                 places.map(p => <Marker
                     key={p.id}
                     coordinate={p.location}
                     title={p.name}

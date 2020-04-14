@@ -6,12 +6,17 @@ export default class Place{
         this.address = address;
     }
 
+    getConstructor(withId){
+        const location = `{latitude:${this.location.latitude},longitude:${this.location.longitude}}`
+        return `Place(${withId?`"${this.id}"`:"null"},"${this.name}",${location},"${this.address}")`
+    }
 
     getObject(){
         return {
             id: this.id,
             name: this.name,
-            location: this.location,
+            latitude: this.location.latitude,
+            longitude: this.location.longitude,
             address: this.address
         }
     }

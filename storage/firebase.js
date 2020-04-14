@@ -24,10 +24,20 @@ export const findAllPlaces = async () => {
         const placesSnapshot = await firebase.firestore().collection(PLACES_COLLECTION).get();
         placesSnapshot.forEach( doc => {
             const {name, latitude, longitude, address} = doc.data();
-            places.push(new Place(doc.id, name, {latitude, longitude}, address))
+            const place = new Place(doc.id, name, {latitude, longitude}, address);
+            console.log(place.getConstructor(false))
+            places.push(place)
         })
         return places;
     }catch(error){
         console.warn(error)
     }
 };
+
+export const insertPlace = async place => {
+    try{
+        await firebase.firestore().collection(PLACES_COLLECTION).add(place.getObject());
+    }catch(error){
+        console.warn(error);
+    }
+}
