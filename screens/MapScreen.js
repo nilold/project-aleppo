@@ -20,14 +20,18 @@ const MapScreen = ({navigation}) => {
     const getUserLocation = async () => {
         const locationGranted = await askForLocationPermissions();
         if (locationGranted) {
-            let {coords} = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.High});
+            let result = await Location.getCurrentPositionAsync();
+            const {coords} = result;
             const {latitude, longitude} = coords;
             setUserLocation({latitude, longitude})
+        }else{
+            console.warn("Location permissions not granted!")
         }
     }
 
     useEffect(() => {
         getUserLocation()
+            .catch(error => console.warn(error))
     }, [])
 
     return (
