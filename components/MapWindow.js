@@ -1,40 +1,62 @@
-import React from "react";
-import {StyleSheet, View, Text} from "react-native";
+import React, {useState, useEffect, useCallback, useMemo} from "react";
+import {StyleSheet, View, Text, TouchableOpacity} from "react-native";
 import MapView, {Marker} from 'react-native-maps';
+import {mapConfigs} from "../constants/config";
 
 const MapWindow = ({userLocation}) => {
-
-    const region = {
-        latitude: -20,
-        longitude: -44,
+    const [maxSearchDistance, setMaxSearchDistance] = useState(1);
+    const [region, setRegion] = useState({
+        latitude: userLocation.latitude,
+        longitude: userLocation.longitude,
         latitudeDelta: 0.01,
         longitudeDelta: 0.005,
-    }
+    });
 
-    if (userLocation) {
-        region.latitude = userLocation.latitude;
-        region.longitude = userLocation.longitude;
-    }
+    const backToUserLocation = useCallback(() => {
+        if (userLocation) {
+            setRegion({
+                ...region,
+                latitude: userLocation.latitude,
+                longitude: userLocation.longitude
+            })
+        }
+    }, [userLocation]);
+
+    useEffect(
+        () => setMaxSearchDistance(Math.round(region.latitudeDelta * mapConfigs.DEG_KM_CONVERSION)),
+        [region],
+    );
 
     return (
         <View style={styles.container}>
-            <MapView style={styles.mapStyle} region={region}>
+            <MapView
+                style={styles.mapStyle}
+                region={region}
+                onRegionChangeComplete={setRegion}
+                maxDelta={mapConfigs.MAX_DELTA}
+            >
                 {userLocation &&
                 <Marker
                     coordinate={userLocation}
                     title={"Eu"}
                 />}
             </MapView>
-            <DistanceComponent />
+            <MapGUI distance={maxSearchDistance} backToUserLocation={backToUserLocation}/>
         </View>
     );
 };
 
-const DistanceComponent = () => (
-    <View style={styles.distanceContainer}>
-        <Text style={styles.distanceLabel}>Exibindo locais até</Text>
-        <Text style={styles.distance}>3 km</Text>
+const MapGUI = ({distance, backToUserLocation}) => (
+    <View style={{width: "100%"}}>
+        <View style={styles.distanceContainer}>
+            <Text style={styles.distanceLabel}>Exibindo locais até</Text>
+            <Text style={styles.distance}>{`${distance} km`}</Text>
+        </View>
+        <TouchableOpacity style={styles.centerContainer} onPress={backToUserLocation}>
+            <Text style={styles.distanceLabel}>Voltar para minha Posição</Text>
+        </TouchableOpacity>
     </View>
+
 )
 
 const styles = StyleSheet.create({
@@ -64,7 +86,17 @@ const styles = StyleSheet.create({
         },
         distance: {
             fontSize: 22,
-        }
+        },
+        centerContainer: {
+            position: "absolute",
+            bottom: 60,
+            left: 40,
+            padding: 5,
+            alignItems: "center",
+            backgroundColor: "rgba(0,0,0, 0.2)",
+            borderRadius: 10,
+            overflow: "hidden"
+        },
     })
 ;
 
