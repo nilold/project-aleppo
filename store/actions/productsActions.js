@@ -1,5 +1,5 @@
 export const FETCH_PLACE_PRODUCTS = "FETCH_PLACE_PRODUCTS";
-import {findPlaceProducts} from "../../storage/firebase";
+import {findPlaceProducts, findAllCategories, findAllPlaces} from "../../storage/firebase";
 
 export const fetchPlaceProducts = placeId => {
     return async dispatch => {
@@ -8,5 +8,8 @@ export const fetchPlaceProducts = placeId => {
     }
 }
 
-// import {createProducts} from "../../storage/localProducts";
+import {createProducts} from "../../storage/localProducts";
+import {createCategories} from "../../storage/localCategories";
+//
 // createProducts()
+// createCategories()

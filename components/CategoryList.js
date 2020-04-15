@@ -10,8 +10,7 @@ const ItemList = ({items}) => {
             data={items}
             renderItem={itemData => (
                 <CategoryItem
-                    image={itemData.item.imageUrl}
-                    title={itemData.item.name}
+                    category={itemData.item}
                     onSelect={() => {}}
                 >
                 </CategoryItem>

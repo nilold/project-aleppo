@@ -6,5 +6,12 @@ export default {
             btn1: "Ok",
             btn2: "Tentar Novamente"
         }
+    },
+    categories:{
+        food: "Alimentos",
+        beverage: "Bebidas",
+        cleaning: "Limpeza",
+        personal_hygiene: "Higiene",
+        animal: "Animals",
     }
 }

@@ -11,8 +11,9 @@ import {
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Card from './Card';
 import Colors from "../constants/Colors";
+import S from "../constants/Strings"
 
-const CategoryItem = ({image, title, children, onSelect}) => {
+const CategoryItem = ({category, children, onSelect}) => {
     let TouchableCmp = TouchableOpacity;
 
     if (Platform.OS === 'android' && Platform.Version >= 21) {
@@ -26,9 +27,9 @@ const CategoryItem = ({image, title, children, onSelect}) => {
                     <View>
                         <View style={styles.imageContainer}>
                             <MaterialCommunityIcons
-                                name="food-apple" size={56} color="white"
+                                name={category.icon} size={56} color="white"
                                 />
-                            <Text style={styles.title}>{"Alimentos"}</Text>
+                            <Text style={styles.title}>{S.categories[category.name]}</Text>
                         </View>
                     </View>
                 </TouchableCmp>

@@ -1,18 +1,18 @@
 import React, {useState, useCallback, useEffect} from "react";
 import {useSelector, useDispatch} from "react-redux";
-import {View, FlatList, StyleSheet, SafeAreaView, ScrollView, RefreshControl} from "react-native";
+import {View,StyleSheet,} from "react-native";
 import Constants from 'expo-constants';
-import ProductItem from "../components/ProductItem";
 import LoadingSpinner from "../components/LoadingSpinner";
 import {fetchPlaceProducts} from "../store/actions/productsActions";
+import {fetchCategories} from "../store/actions/categoriesActions";
 import ItemList from "../components/ItemList";
 import CategoryList from "../components/CategoryList"
-import {Item} from "react-navigation-header-buttons";
 
 const MainScreen = ({route}) => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const products = useSelector(state => state.products.placeProducts);
+    const categories = useSelector(state => state.categories.categories);
     const dispatch = useDispatch();
 
     const placeId = route.params.placeId;
@@ -29,11 +29,27 @@ const MainScreen = ({route}) => {
         [dispatch, setIsLoading],
     );
 
+    const loadCategories = useCallback(
+        async () => {
+            setError(null);
+            try {
+                await dispatch(fetchCategories());
+            } catch (err) {
+                setError(err);
+            }
+        },
+        [dispatch, setIsLoading],
+    );
+
     useEffect(() => {
         setIsLoading(true)
-        const loadAsync = async () => {
-            await loadProducts()
-        };
+        const loadProductsAsync = async () => await loadProducts();
+        const loadCategoriesAsync = async () => await loadCategories();
+        const loadAsync = async ( ) => {
+            loadProductsAsync()
+            loadCategoriesAsync()
+        }
+
         loadAsync().then(result => setIsLoading(false))
 
     }, [dispatch]);
@@ -48,7 +64,7 @@ const MainScreen = ({route}) => {
                 <ItemList items={products} loadItems={loadProducts}/>
             </View>
             <View style={styles.categoryContainer}>
-                <CategoryList items={products} loadItems={loadProducts}/>
+                <CategoryList items={categories} loadItems={loadProducts}/>
             </View>
         </View>
     );
