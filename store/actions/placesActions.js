@@ -1,6 +1,6 @@
 export const FETCH_ALL_PLACES = "FETCH_ALL_PLACES";
 export const ADD_PLACE = "ADD_PLACE";
-import {findAllPlaces, insertPlace} from "../storage/firebase";
+import {findAllPlaces, insertPlace} from "../../storage/firebase";
 
 
 // This function should use some sort of local caching
@@ -18,3 +18,4 @@ export const addPlace = (place) => {
         dispatch({type: ADD_PLACE, place: place})
     }
 }
+

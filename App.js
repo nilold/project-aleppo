@@ -9,7 +9,7 @@ if (!global.btoa) {  global.btoa = encode }
 
 if (!global.atob) { global.atob = decode }
 
-import rootReducer from "./store/rootReducer";
+import rootReducer from "./store/reducers/rootReducer";
 import Navigator from "./navigation/navigation";
 
 const store = createStore(rootReducer, applyMiddleware(thunk, logger));

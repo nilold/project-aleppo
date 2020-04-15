@@ -4,7 +4,7 @@ import MapView, {Marker} from 'react-native-maps';
 import {mapConfigs} from "../constants/config";
 import Place from "../models/place";
 
-const MapWindow = ({userLocation, places}) => {
+const MapWindow = ({navigation, userLocation, places}) => {
     const [maxSearchDistance, setMaxSearchDistance] = useState(1);
     const [region, setRegion] = useState({
         latitude: userLocation.latitude,
@@ -28,6 +28,10 @@ const MapWindow = ({userLocation, places}) => {
         [region],
     );
 
+    const onMarkerPressed = placeId => {
+        navigation.navigate("mainScreen", {placeId})
+    }
+
     return (
         <View style={styles.container}>
             <MapView
@@ -42,10 +46,11 @@ const MapWindow = ({userLocation, places}) => {
                     title={"Eu"}
                 />}
                 {places &&
-                 places.map(p => <Marker
+                places.map(p => <Marker
                     key={p.id}
                     coordinate={p.location}
                     title={p.name}
+                    onPress={() => onMarkerPressed(p.id)}
                 />)}
             </MapView>
             <MapGUI distance={maxSearchDistance} backToUserLocation={backToUserLocation}/>

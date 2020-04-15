@@ -1,4 +1,4 @@
-import {FETCH_ALL_PLACES} from "./placesActions";
+import {FETCH_ALL_PLACES} from "../actions/placesActions";
 
 const INITIAL_STATE = {
     allPlaces: [],

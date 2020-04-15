@@ -6,7 +6,7 @@ import {askForLocationPermissions} from "../permissions/permissions"
 import HeaderButton from "../components/HeaderButton";
 import MapWindow from "../components/MapWindow";
 
-import {fetchPlaces} from "../store/placesActions";
+import {fetchPlaces} from "../store/actions/placesActions";
 
 const MapScreen = ({navigation}) => {
     const [userLocation, setUserLocation] = useState(null);
@@ -44,7 +44,7 @@ const MapScreen = ({navigation}) => {
 
     return (
         <View style={styles.container}>
-            {userLocation && <MapWindow userLocation={userLocation} places={places}/>}
+            {userLocation && <MapWindow navigation={navigation} userLocation={userLocation} places={places}/>}
         </View>
     );
 };
