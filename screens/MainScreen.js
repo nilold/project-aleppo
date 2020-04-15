@@ -21,7 +21,11 @@ const MainScreen = ({route, navigation}) => {
 
     useLayoutEffect(() => {
         navigation.setOptions({
-            title: place.name
+            title: place.name,
+            headerRight: () => <HeaderButton
+                onPress={() => {}}
+                iconName={Platform.OS === "ios" ? "ios-add" : "md-add"}
+            />
         })
     }, [navigation, route]);
 
@@ -34,7 +38,7 @@ const MainScreen = ({route, navigation}) => {
                 setError(err);
             }
         },
-        [dispatch, setIsLoading],
+        [dispatch],
     );
 
     const loadCategories = useCallback(
@@ -46,7 +50,7 @@ const MainScreen = ({route, navigation}) => {
                 setError(err);
             }
         },
-        [dispatch, setIsLoading],
+        [],
     );
 
     useEffect(() => {
@@ -58,7 +62,8 @@ const MainScreen = ({route, navigation}) => {
             loadCategoriesAsync()
         }
 
-        loadAsync().then(result => setIsLoading(false))
+        loadAsync().then(_ => setIsLoading(false));
+
 
     }, [dispatch]);
 
