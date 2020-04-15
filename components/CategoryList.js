@@ -1,17 +1,35 @@
 import React, {useState, useCallback} from "react";
-import {StyleSheet, FlatList} from "react-native";
+import {FlatList} from "react-native";
 import CategoryItem from "./CategoryItem";
 
 
-const ItemList = ({items}) => {
+const CategoryList = ({items, selectCategories}) => {
+    const [selected, setSelected] = useState(new Map());
+
+    const onSelect = useCallback(
+        name => {
+            const newSelected = new Map(selected);
+            newSelected.set(name, !selected.get(name));
+            setSelected(newSelected);
+            const selectedNames = [];
+            newSelected.forEach((v, k) => {
+                if (v) selectedNames.push(k)
+            });
+            selectCategories(selectedNames)
+        },
+        [selected],
+    );
+
     return (
         <FlatList
             horizontal
             data={items}
-            renderItem={itemData => (
+            extraData={selected}
+            renderItem={i => (
                 <CategoryItem
-                    category={itemData.item}
-                    onSelect={() => {}}
+                    category={i.item}
+                    selected={!!selected.get(i.item.name)}
+                    onSelect={onSelect}
                 >
                 </CategoryItem>
             )}
@@ -20,4 +38,4 @@ const ItemList = ({items}) => {
 
 };
 
-export default ItemList;
+export default CategoryList;

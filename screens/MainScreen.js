@@ -1,6 +1,6 @@
 import React, {useState, useCallback, useEffect} from "react";
 import {useSelector, useDispatch} from "react-redux";
-import {View,StyleSheet,} from "react-native";
+import {View, StyleSheet,} from "react-native";
 import Constants from 'expo-constants';
 import LoadingSpinner from "../components/LoadingSpinner";
 import {fetchPlaceProducts} from "../store/actions/productsActions";
@@ -10,6 +10,7 @@ import CategoryList from "../components/CategoryList"
 
 const MainScreen = ({route}) => {
     const [isLoading, setIsLoading] = useState(true);
+    const [selectedCategories, setSelectedCategories] = useState([]);
     const [error, setError] = useState(null);
     const products = useSelector(state => state.products.placeProducts);
     const categories = useSelector(state => state.categories.categories);
@@ -45,7 +46,7 @@ const MainScreen = ({route}) => {
         setIsLoading(true)
         const loadProductsAsync = async () => await loadProducts();
         const loadCategoriesAsync = async () => await loadCategories();
-        const loadAsync = async ( ) => {
+        const loadAsync = async () => {
             loadProductsAsync()
             loadCategoriesAsync()
         }
@@ -54,6 +55,10 @@ const MainScreen = ({route}) => {
 
     }, [dispatch]);
 
+    const categoryFilterHandler = categories => {
+
+    }
+
     if (isLoading) {
         return <LoadingSpinner/>
     }
@@ -61,10 +66,17 @@ const MainScreen = ({route}) => {
     return (
         <View style={styles.container}>
             <View style={styles.itemsContainer}>
-                <ItemList items={products} loadItems={loadProducts}/>
+                <ItemList
+                    items={products.filter(p => selectedCategories.length === 0 || selectedCategories.includes(p.category))}
+                    loadItems={loadProducts}
+                />
             </View>
             <View style={styles.categoryContainer}>
-                <CategoryList items={categories} loadItems={loadProducts}/>
+                <CategoryList
+                    items={categories}
+                    loadItems={loadProducts}
+                    selectCategories={setSelectedCategories}
+                />
             </View>
         </View>
     );
@@ -76,10 +88,10 @@ const styles = StyleSheet.create({
         justifyContent: "space-around",
         marginTop: Constants.statusBarHeight,
     },
-    itemsContainer:{
-        height:"50%"
+    itemsContainer: {
+        height: "50%"
     },
-    categoryContainer:{},
+    categoryContainer: {},
 });
 
 export default MainScreen;
