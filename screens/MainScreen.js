@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useEffect} from "react";
+import React, {useState, useCallback, useEffect, useLayoutEffect} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import {View, StyleSheet,} from "react-native";
 import Constants from 'expo-constants';
@@ -7,8 +7,9 @@ import {fetchPlaceProducts} from "../store/actions/productsActions";
 import {fetchCategories} from "../store/actions/categoriesActions";
 import ItemList from "../components/ItemList";
 import CategoryList from "../components/CategoryList"
+import HeaderButton from "../components/HeaderButton";
 
-const MainScreen = ({route}) => {
+const MainScreen = ({route, navigation}) => {
     const [isLoading, setIsLoading] = useState(true);
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [error, setError] = useState(null);
@@ -16,13 +17,19 @@ const MainScreen = ({route}) => {
     const categories = useSelector(state => state.categories.categories);
     const dispatch = useDispatch();
 
-    const placeId = route.params.placeId;
+    const place = route.params.place;
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            title: place.name
+        })
+    }, [navigation, route]);
 
     const loadProducts = useCallback(
         async () => {
             setError(null);
             try {
-                await dispatch(fetchPlaceProducts(placeId));
+                await dispatch(fetchPlaceProducts(place.id));
             } catch (err) {
                 setError(err);
             }
@@ -55,10 +62,6 @@ const MainScreen = ({route}) => {
 
     }, [dispatch]);
 
-    const categoryFilterHandler = categories => {
-
-    }
-
     if (isLoading) {
         return <LoadingSpinner/>
     }
@@ -89,7 +92,7 @@ const styles = StyleSheet.create({
         marginTop: Constants.statusBarHeight,
     },
     itemsContainer: {
-        height: "50%"
+        // height: "50%"
     },
     categoryContainer: {},
 });

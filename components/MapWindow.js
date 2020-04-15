@@ -28,8 +28,8 @@ const MapWindow = ({navigation, userLocation, places}) => {
         [region],
     );
 
-    const onMarkerPressed = placeId => {
-        navigation.navigate("mainScreen", {placeId})
+    const onMarkerPressed = place => {
+        navigation.navigate("mainScreen", {place})
     }
 
     return (
@@ -50,7 +50,7 @@ const MapWindow = ({navigation, userLocation, places}) => {
                     key={p.id}
                     coordinate={p.location}
                     title={p.name}
-                    onPress={() => onMarkerPressed(p.id)}
+                    onPress={() => onMarkerPressed(p)}
                 />)}
             </MapView>
             <MapGUI distance={maxSearchDistance} backToUserLocation={backToUserLocation}/>

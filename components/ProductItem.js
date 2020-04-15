@@ -39,7 +39,8 @@ const ProductItem = ({image, title, price, children, onSelect}) => {
 
 const styles = StyleSheet.create({
     productCard: {
-        width: 200,
+        width: 250,
+        height: 300,
         margin: 20,
         justifyContent: "flex-start"
     },
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
     },
     imageContainer: {
         width: '100%',
-        height: '60%',
+        height: '70%',
         overflow: 'hidden'
     },
     image: {
