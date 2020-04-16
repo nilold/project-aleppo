@@ -1,9 +1,18 @@
 export const FETCH_PLACE_PRODUCTS = "FETCH_PLACE_PRODUCTS";
-import {findPlaceProducts} from "../../storage/placeStorage";
+import {findStoreProducts, findMallProducts} from "../../storage/placeStorage";
 
-export const fetchPlaceProducts = placeId => {
+export const fetchPlaceProducts = (place) => {
     return async dispatch => {
-        const placeProducts = await findPlaceProducts(placeId);
-        dispatch({type: FETCH_PLACE_PRODUCTS, placeProducts})
+        try {
+            const placeProducts = place.category === "mall" ?
+                await findMallProducts(place.id)
+                :
+                await findStoreProducts(place.id);
+
+            dispatch({type: FETCH_PLACE_PRODUCTS, placeProducts})
+        } catch (e) {
+            throw e;
+        }
     }
 }
+

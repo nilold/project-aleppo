@@ -15,17 +15,17 @@ const MainScreen = ({route, navigation}) => {
     const [error, setError] = useState(null);
     const products = useSelector(state => state.products.placeProducts);
     const categories = useSelector(state => state.categories.categories);
+    const [filteredCategories, setFilteredCategories] = useState(new Set());
     const dispatch = useDispatch();
 
     const place = route.params.place;
-
-    console.log(products)
 
     useLayoutEffect(() => {
         navigation.setOptions({
             title: place.name,
             headerRight: () => <HeaderButton
-                onPress={() => {}}
+                onPress={() => {
+                }}
                 iconName={Platform.OS === "ios" ? "ios-add" : "md-add"}
             />
         })
@@ -35,7 +35,7 @@ const MainScreen = ({route, navigation}) => {
         async () => {
             setError(null);
             try {
-                await dispatch(fetchPlaceProducts(place.id));
+                await dispatch(fetchPlaceProducts(place));
             } catch (err) {
                 setError(err);
             }
@@ -65,9 +65,13 @@ const MainScreen = ({route, navigation}) => {
         }
 
         loadAsync().then(_ => setIsLoading(false));
-
-
     }, [dispatch]);
+
+    useEffect(() => {
+            filteredCategories.clear();
+            products.forEach(p => filteredCategories.add(p.category));
+        },
+        [products, categories]);
 
     if (isLoading) {
         return <LoadingSpinner/>
@@ -83,7 +87,7 @@ const MainScreen = ({route, navigation}) => {
             </View>
             <View style={styles.categoryContainer}>
                 <CategoryList
-                    items={categories}
+                    items={categories.filter(c => filteredCategories.has(c.name))}
                     loadItems={loadProducts}
                     selectCategories={setSelectedCategories}
                 />

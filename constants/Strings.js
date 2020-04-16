@@ -13,5 +13,11 @@ export default {
         cleaning: "Limpeza",
         personal_hygiene: "Higiene",
         animal: "Animals",
+        clothing: "Moda",
+        services: "Serviço",
+        books: "Literatura",
+        other: "Outros",
+        electronics: "Eletrônicos",
+        accessories: "Acessórios"
     }
 }

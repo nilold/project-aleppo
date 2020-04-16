@@ -1,16 +1,13 @@
 export default class Product {
-    constructor(id, name, price, category, imageName, imageUrl, placeId) {
+    constructor(id, name, price, category, imageName, imageUrl, storeId, mallId) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.category = category;
         this.imageName = imageName;
         this.imageUrl = imageUrl;
-        this.placeId = placeId;
-    }
-
-    getConstructor(withId) {
-        return `Product(${withId ? `"${this.id}"` : "null"},"${this.name}","${this.price}","${this.category}","${this.imageName}","${this.imageUrl}","${this.placeId}")`
+        this.storeId = storeId;
+        this.mallId = mallId ? mallId: null;
     }
 
     getObject() {
@@ -21,7 +18,8 @@ export default class Product {
             category: this.category,
             imageName: this.imageName,
             imageUrl: this.imageUrl,
-            placeId: this.placeId
+            storeId: this.storeId,
+            mallId: this.mallId,
         }
     }
 }

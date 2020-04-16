@@ -22,3 +22,9 @@ export default function App() {
         </Provider>
     );
 }
+
+
+// WARNING, this inserts stuff in the database
+// import "./storage/temp/localPlaces";
+// import "./storage/temp/localProducts";
+// import "./storage/temp/localCategories";
