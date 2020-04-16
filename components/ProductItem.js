@@ -3,24 +3,16 @@ import {
     View,
     Text,
     Image,
-    StyleSheet,
-    TouchableOpacity,
-    TouchableNativeFeedback,
-    Platform
+    StyleSheet
 } from 'react-native';
 import Card from './Card';
+import TouchableItem from "./TouchableItem";
 
 const ProductItem = ({image, title, price, children, onSelect}) => {
-    let TouchableCmp = TouchableOpacity;
-
-    if (Platform.OS === 'android' && Platform.Version >= 21) {
-        TouchableCmp = TouchableNativeFeedback;
-    }
-
     return (
         <Card style={styles.productCard}>
             <View style={styles.touchable}>
-                <TouchableCmp onPress={onSelect} useForeground>
+                <TouchableItem onPress={onSelect}>
                     <View>
                         <View style={styles.imageContainer}>
                             <Image style={styles.image}
@@ -31,7 +23,7 @@ const ProductItem = ({image, title, price, children, onSelect}) => {
                             <Text style={styles.price}>${price.toFixed(2)}</Text>
                         </View>
                     </View>
-                </TouchableCmp>
+                </TouchableItem>
             </View>
         </Card>
     );

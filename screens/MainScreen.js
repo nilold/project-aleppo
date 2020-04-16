@@ -1,6 +1,6 @@
 import React, {useState, useCallback, useEffect, useLayoutEffect} from "react";
 import {useSelector, useDispatch} from "react-redux";
-import {View, StyleSheet,} from "react-native";
+import {View, Text, StyleSheet,} from "react-native";
 import Constants from 'expo-constants';
 import LoadingSpinner from "../components/LoadingSpinner";
 import {fetchPlaceProducts} from "../store/actions/productsActions";
@@ -8,6 +8,9 @@ import {fetchCategories} from "../store/actions/categoriesActions";
 import ItemList from "../components/ItemList";
 import CategoryList from "../components/CategoryList"
 import HeaderButton from "../components/HeaderButton";
+import Card from "../components/Card";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
+import TouchableItem from "../components/TouchableItem";
 
 const MainScreen = ({route, navigation}) => {
     const [isLoading, setIsLoading] = useState(true);
@@ -19,6 +22,7 @@ const MainScreen = ({route, navigation}) => {
     const dispatch = useDispatch();
 
     const place = route.params.place;
+    const isMall = place.category === "mall";
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -85,6 +89,20 @@ const MainScreen = ({route, navigation}) => {
                     loadItems={loadProducts}
                 />
             </View>
+            {isMall &&
+
+            <Card style={styles.toStoreContainer}>
+                <TouchableItem onPress={() => {
+                    console.log("pressed")
+                }}>
+                    <View style={styles.toStoreCard}>
+                        <Text style={styles.toStoreText}>Ver por lojas</Text>
+                        <MaterialCommunityIcons
+                            name="arrow-right-bold-hexagon-outline" size={56} color="white"/>
+                    </View>
+                </TouchableItem>
+            </Card>
+            }
             <View style={styles.categoryContainer}>
                 <CategoryList
                     items={categories.filter(c => filteredCategories.has(c.name))}
@@ -106,6 +124,21 @@ const styles = StyleSheet.create({
         // height: "50%"
     },
     categoryContainer: {},
+    toStoreContainer: {
+        height: 80,
+        margin: 15,
+        padding: 10,
+        backgroundColor: "#236bc2"
+    },
+    toStoreCard: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-around"
+    },
+    toStoreText: {
+        color: "white",
+        fontSize: 26
+    }
 });
 
 export default MainScreen;

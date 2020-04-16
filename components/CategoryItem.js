@@ -1,29 +1,16 @@
 import React from 'react';
-import {
-    View,
-    Text,
-    Image,
-    StyleSheet,
-    TouchableOpacity,
-    TouchableNativeFeedback,
-    Platform
-} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import Card from './Card';
 import Colors from "../constants/Colors";
 import S from "../constants/Strings"
+import TouchableItem from "./TouchableItem";
 
 const CategoryItem = ({category, onSelect, selected}) => {
-    let TouchableCmp = TouchableOpacity;
-
-    if (Platform.OS === 'android' && Platform.Version >= 21) {
-        TouchableCmp = TouchableNativeFeedback;
-    }
-
     return (
         <Card style={styles.productCard}>
             <View style={styles.touchable}>
-                <TouchableCmp onPress={() => onSelect(category.name)} useForeground>
+                <TouchableItem onPress={() => onSelect(category.name)}>
                     <View>
                         <View style={{
                             ...styles.imageContainer,
@@ -35,7 +22,7 @@ const CategoryItem = ({category, onSelect, selected}) => {
                             <Text style={styles.title}>{S.categories[category.name]}</Text>
                         </View>
                     </View>
-                </TouchableCmp>
+                </TouchableItem>
             </View>
         </Card>
     );
