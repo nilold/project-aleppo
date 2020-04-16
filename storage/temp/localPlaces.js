@@ -1,5 +1,5 @@
-import Place from "../models/place";
-import {insertPlace} from "./firebase";
+import Place from "../../models/place";
+import {insertPlace} from "../firebase";
 
 const places = [
     new Place(null, "Verde Mar São Pedro", {

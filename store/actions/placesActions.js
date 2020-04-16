@@ -1,6 +1,10 @@
+import place from "../../models/place";
+
 export const FETCH_ALL_PLACES = "FETCH_ALL_PLACES";
 export const ADD_PLACE = "ADD_PLACE";
-import {findAllPlaces, insertPlace} from "../../storage/firebase";
+export const FETCH_PLACE_PRODUCTS = "FETCH_PLACE_PRODUCTS";
+
+import {findAllPlaces, insertPlace, findPlaceProducts} from "../../storage/placeStorage";
 
 
 // This function should use some sort of local caching
@@ -19,3 +23,9 @@ export const addPlace = (place) => {
     }
 }
 
+export const fetchPlaceProducts = placeId => {
+    return async dispatch => {
+        const placeProducts = await findPlaceProducts(placeId);
+        dispatch({type: FETCH_PLACE_PRODUCTS, placeProducts})
+    }
+}

@@ -1,5 +1,5 @@
-import Product from "../models/product";
-import {getImageUrl, insertProduct} from "./firebase";
+import Product from "../../models/product";
+import {getImageUrl, insertProduct} from "../firebase";
 
 const placeId = "YanWkMnHL31WIScWqBLV" // verdemar
 // const placeId = "zAc9LMQBM9BUuYlZ2QKI" // apple market

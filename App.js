@@ -12,7 +12,8 @@ if (!global.atob) { global.atob = decode }
 import rootReducer from "./store/reducers/rootReducer";
 import Navigator from "./navigation/navigation";
 
-const store = createStore(rootReducer, applyMiddleware(thunk, logger));
+const store = createStore(rootReducer, applyMiddleware(thunk));
+// const store = createStore(rootReducer, applyMiddleware(thunk, logger));
 
 export default function App() {
     return (

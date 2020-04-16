@@ -1,5 +1,5 @@
-import Category from "../models/category";
-import {insertCategory} from "./firebase";
+import Category from "../../models/category";
+import {insertCategory} from "../firebase";
 
 const categories = [
     new Category(null, "food", "food", "#50DCFF",null, null),

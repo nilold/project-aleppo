@@ -1,5 +1,5 @@
 export const FETCH_CATEGORIES = "FETCH_CATEGORIES";
-import {findAllCategories} from "../../storage/firebase";
+import {findAllCategories} from "../../storage/categoriesStorage";
 
 export const fetchCategories = () => {
     return async dispatch => {

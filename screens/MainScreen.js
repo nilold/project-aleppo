@@ -3,7 +3,7 @@ import {useSelector, useDispatch} from "react-redux";
 import {View, StyleSheet,} from "react-native";
 import Constants from 'expo-constants';
 import LoadingSpinner from "../components/LoadingSpinner";
-import {fetchPlaceProducts} from "../store/actions/productsActions";
+import {fetchPlaceProducts} from "../store/actions/placesActions";
 import {fetchCategories} from "../store/actions/categoriesActions";
 import ItemList from "../components/ItemList";
 import CategoryList from "../components/CategoryList"
@@ -18,6 +18,8 @@ const MainScreen = ({route, navigation}) => {
     const dispatch = useDispatch();
 
     const place = route.params.place;
+
+    console.log(products)
 
     useLayoutEffect(() => {
         navigation.setOptions({
