@@ -1,4 +1,4 @@
-import {FETCH_PLACE_PRODUCTS} from "../actions/placesActions";
+import {FETCH_PLACE_PRODUCTS} from "../actions/productsActions";
 
 const INITIAL_STATE = {
     placeProducts: [],
