@@ -8,19 +8,19 @@ import {
 import Card from './Card';
 import TouchableItem from "./TouchableItem";
 
-const ProductItem = ({image, title, price, children, onSelect}) => {
+const CardItem = ({image, title, price, children, onSelect}) => {
     return (
         <Card style={styles.productCard}>
             <View style={styles.touchable}>
                 <TouchableItem onPress={onSelect}>
-                    <View>
+                    <View style={styles.container}>
                         <View style={styles.imageContainer}>
                             <Image style={styles.image}
                                    source={image ? {uri: image} : require('../assets/icon.png')}/>
                         </View>
                         <View style={styles.details}>
                             <Text style={styles.title}>{title}</Text>
-                            <Text style={styles.price}>${price.toFixed(2)}</Text>
+                            {price && <Text style={styles.price}>${price.toFixed(2)}</Text>}
                         </View>
                     </View>
                 </TouchableItem>
@@ -32,14 +32,15 @@ const ProductItem = ({image, title, price, children, onSelect}) => {
 const styles = StyleSheet.create({
     productCard: {
         width: 250,
-        height: 300,
         margin: 20,
-        justifyContent: "flex-start"
+        alignSelf: "flex-start"
     },
     touchable: {
         borderRadius: 10,
         width: "100%",
-        height: "100%"
+    },
+    container: {
+        height: 330
     },
     imageContainer: {
         width: '100%',
@@ -48,13 +49,12 @@ const styles = StyleSheet.create({
     },
     image: {
         margin: 10,
-        width: '100%',
         height: '100%',
         resizeMode: 'contain'
     },
     details: {
+        height: "30%",
         alignItems: 'center',
-        height: 100,
         padding: 5
     },
     title: {
@@ -62,9 +62,9 @@ const styles = StyleSheet.create({
         marginVertical: 2
     },
     price: {
-        fontSize: 14,
+        fontSize: 16,
         color: '#888'
     }
 });
 
-export default ProductItem;
+export default CardItem;

@@ -4,7 +4,7 @@ import {findStoreProducts, findMallProducts} from "../../storage/placeStorage";
 export const fetchPlaceProducts = (place) => {
     return async dispatch => {
         try {
-            const placeProducts = place.category === "mall" ?
+            const placeProducts = place.type === "mall" ?
                 await findMallProducts(place.id)
                 :
                 await findStoreProducts(place.id);

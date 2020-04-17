@@ -1,8 +1,10 @@
-import React, {useState, useCallback, useEffect, useLayoutEffect} from "react";
+import React, {useState, useCallback, useEffect, useLayoutEffect, useMemo} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import {View, Text, StyleSheet,} from "react-native";
+import {useFocusEffect} from '@react-navigation/native';
 import Constants from 'expo-constants';
 import LoadingSpinner from "../components/LoadingSpinner";
+import {fetchMallStores} from "../store/actions/placesActions";
 import {fetchPlaceProducts} from "../store/actions/productsActions";
 import {fetchCategories} from "../store/actions/categoriesActions";
 import ItemList from "../components/ItemList";
@@ -18,11 +20,13 @@ const MainScreen = ({route, navigation}) => {
     const [error, setError] = useState(null);
     const products = useSelector(state => state.products.placeProducts);
     const categories = useSelector(state => state.categories.categories);
+    const stores = useSelector(state => state.places.stores);
     const [filteredCategories, setFilteredCategories] = useState(new Set());
     const dispatch = useDispatch();
 
+    const showStores = route.params.showStores;
     const place = route.params.place;
-    const isMall = place.category === "mall";
+    const isMall = place.type === "mall";
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -44,7 +48,7 @@ const MainScreen = ({route, navigation}) => {
                 setError(err);
             }
         },
-        [dispatch],
+        [dispatch, route, isMall, place],
     );
 
     const loadCategories = useCallback(
@@ -56,26 +60,57 @@ const MainScreen = ({route, navigation}) => {
                 setError(err);
             }
         },
-        [],
+        [dispatch],
     );
 
-    useEffect(() => {
-        setIsLoading(true)
-        const loadProductsAsync = async () => await loadProducts();
-        const loadCategoriesAsync = async () => await loadCategories();
-        const loadAsync = async () => {
-            loadProductsAsync()
-            loadCategoriesAsync()
-        }
+    const loadStores = useCallback(
+        async () => {
+            setError(null);
+            try {
+                if (isMall)
+                    await dispatch(fetchMallStores(place.id));
+            } catch (err) {
+                setError(err);
+            }
+        },
+        [dispatch, isMall],
+    );
 
-        loadAsync().then(_ => setIsLoading(false));
-    }, [dispatch]);
+    useFocusEffect(
+        useCallback(() => {
+            const loadAsync = async () => await Promise.all([
+                await loadProducts(),
+                await loadCategories(),
+                await loadStores()
+            ])
+
+            loadAsync().then(_ => setIsLoading(false));
+        }, [dispatch, place, route])
+    );
+
+    const getItems = useMemo(() => {
+        if (showStores)
+            return stores.filter(s =>
+                selectedCategories.length === 0 ||
+                s.categories.some(c => selectedCategories.includes(c))
+            )
+
+        return products.filter(p =>
+            selectedCategories.length === 0 ||
+            selectedCategories.includes(p.category)
+        )
+
+    }, [showStores, stores, products, selectedCategories]);
 
     useEffect(() => {
             filteredCategories.clear();
-            products.forEach(p => filteredCategories.add(p.category));
+            if (showStores) {
+                stores.forEach(s => s.categories.forEach(c => filteredCategories.add(c)));
+            } else {
+                products.forEach(p => filteredCategories.add(p.category));
+            }
         },
-        [products, categories]);
+        [showStores, products, stores, categories]);
 
     if (isLoading) {
         return <LoadingSpinner/>
@@ -85,16 +120,14 @@ const MainScreen = ({route, navigation}) => {
         <View style={styles.container}>
             <View style={styles.itemsContainer}>
                 <ItemList
-                    items={products.filter(p => selectedCategories.length === 0 || selectedCategories.includes(p.category))}
+                    items={getItems}
                     loadItems={loadProducts}
+                    navigation={navigation}
                 />
             </View>
             {isMall &&
-
             <Card style={styles.toStoreContainer}>
-                <TouchableItem onPress={() => {
-                    console.log("pressed")
-                }}>
+                <TouchableItem onPress={() => navigation.push("mainScreen", {showStores: true, place})}>
                     <View style={styles.toStoreCard}>
                         <Text style={styles.toStoreText}>Ver por lojas</Text>
                         <MaterialCommunityIcons
@@ -120,9 +153,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-around",
         marginTop: Constants.statusBarHeight,
     },
-    itemsContainer: {
-        // height: "50%"
-    },
+    itemsContainer: {},
     categoryContainer: {},
     toStoreContainer: {
         height: 80,

@@ -8,6 +8,11 @@ export const PRODUCTS_COLLECTION = "products"
 
 const firebase = new Firebase()
 
+function mapDocToPlace(doc) {
+    const {name, latitude, longitude, address, imageName, imageUrl, type, categories} = doc.data();
+    return new Place(doc.id, name, {latitude, longitude}, address, imageName, imageUrl, type, categories);
+}
+
 export const findAllPlaces = async () => {
     const places = [];
     try {
@@ -15,17 +20,32 @@ export const findAllPlaces = async () => {
             .collection(PLACES_COLLECTION)
             .get();
 
-        placesSnapshot.forEach(doc => {
-            const {name, latitude, longitude, address, imageName, imageUrl, category} = doc.data();
-            const place = new Place(doc.id, name, {latitude, longitude}, address, imageName, imageUrl, category);
-            places.push(place)
-        })
+        placesSnapshot.forEach(doc => places.push(mapDocToPlace(doc)))
+
         return places;
     } catch (e) {
         console.warn(e)
         throw e;
     }
 };
+
+export const findMallStores = async mallId => {
+    const places = [];
+    try {
+        const placesSnapshot = await firebase.firestore()
+            .collection(PLACES_COLLECTION)
+            .doc(mallId)
+            .collection(PLACES_COLLECTION)
+            .get()
+
+        placesSnapshot.forEach(doc => places.push(mapDocToPlace(doc)))
+
+        return places;
+    } catch (e) {
+        console.warn(e)
+        throw e;
+    }
+}
 
 export const insertPlace = async place => {
     try {
@@ -60,6 +80,8 @@ export const insertStoreWithProducts = async store => {
 }
 
 export const insertStoreInMallWithProducts = async (mallId, store) => {
+    store.products.forEach( p => store.categories.add(p.category))
+
     try {
         store.imageUrl = await findImageUrl("places", store.imageName)
         firebase.firestore()

@@ -1,8 +1,8 @@
 import React, {useState, useCallback} from "react";
 import {View, Text, StyleSheet, ScrollView, RefreshControl, FlatList} from "react-native";
-import ProductItem from "./ProductItem";
+import CardItem from "./CardItem";
 
-const ItemList = ({items, loadItems}) => {
+const ItemList = ({items, loadItems, navigation}) => {
     // const [isRefreshing, setIsRefreshing] = useState(false);
 
     // const internalLoadItems = useCallback(
@@ -13,18 +13,25 @@ const ItemList = ({items, loadItems}) => {
     //     }
     // )
 
+    const handleItemSelect = item => {
+        console.log(item);
+        if (item.type && item.type === "store") {
+            navigation.push("mainScreen", {place: item, showStores: false, isMall: false})
+        }
+    }
+
     return (
         <FlatList
             horizontal
             data={items}
             renderItem={itemData => (
-                <ProductItem
+                <CardItem
                     image={itemData.item.imageUrl}
                     title={itemData.item.name}
                     price={itemData.item.price}
-                    onSelect={() => {}}
+                    onSelect={() => handleItemSelect(itemData.item)}
                 >
-                </ProductItem>
+                </CardItem>
             )}
         />
     );
@@ -44,13 +51,13 @@ const ItemList = ({items, loadItems}) => {
     //             horizontal
     //             data={items}
     //             renderItem={itemData => (
-    //                 <ProductItem
+    //                 <CardItem
     //                     image={itemData.item.imageUrl}
     //                     title={itemData.item.title}
     //                     price={itemData.item.price}
     //                     onSelect={() => {}}
     //                 >
-    //                 </ProductItem>
+    //                 </CardItem>
     //             )}
     //         />
     //
