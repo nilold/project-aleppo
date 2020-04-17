@@ -31,7 +31,7 @@ const MainScreen = ({route, navigation}) => {
     useLayoutEffect(() => {
         navigation.setOptions({
             title: place.name,
-            headerRight: () => <HeaderButton
+            headerRight: () => !showStores && <HeaderButton
                 onPress={() => {
                 }}
                 iconName={Platform.OS === "ios" ? "ios-add" : "md-add"}
